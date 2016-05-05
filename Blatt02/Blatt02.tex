@@ -1,0 +1,65 @@
+\documentclass[a4paper,11pt,twoside,draft=false]{scrartcl}
+\input{../head/paktete}
+\input{../head/math}
+\input{../head/lstlisting}
+
+\geometry{left=25mm, right=15mm, bottom=25mm}
+\setlength{\parindent}{0em} 
+\setlength{\headheight}{0em} 
+\newcommand{\RM}[1]{\MakeUppercase{\romannumeral #1}}
+\renewcommand{\thefootnote}{\Roman{footnote}}
+
+\title{Datenbanken I}
+\subtitle{Blatt 2}
+\author{Markus Vieth \and Christian Stricker}
+\date{\today}
+
+\begin{document}
+\maketitle
+\cleardoublepage
+\section{Aufgabe}
+\[\text{Person} = \{\underline{\text{p\_id}:number},~ \text{firstname}:string,~ \text{lastname}:string \}\]
+
+\[\text{acts} = \{ \underline{\text{p\_id}:number,~ \text{m\_id}:number},~ \text{role}:string \}\]
+
+\[\text{Movie} = \{ \underline{\text{m\_id}:number},~ \text{title}:string,~ \text{year}:number,~ \text{Oscars}:number,~ \text{Genre}:string,~ \text{FSK}:number,\]
+\[ \text{language}:string,~ \text{length}:number,~ \text{directedBy}:number \}\]
+
+\[\text{Cinema} = \{ \underline{\text{name}:string,~ \text{location}:string} \}\]
+
+\[\text{Room} = \{\underline{\text{RoomNr}:number,~ \text{inName}:string,~ \text{inLocation}:string},~ size:number \}\]
+
+\[\text{screening} = \{ \underline{\text{m\_id}:number,~ \text{RoomNr}:number,~ \text{inName}:string,~ \text{inLocation}:string},\]
+\[ \text{date}:date,~ \text{time}:number,~ \text{price}:number \}\]
+
+\section{Aufgabe}
+\subsection{Select the titles of all movies that were directed by Friedrich Wilhelm Murnau.}
+\begin{lstlisting}
+$\pi_{\text{title}}$ (
+	$\sigma_{\text{firstname = 'Friedrich Wilhelm' } \land \text{ lastname = 'Murnau'}}$ (
+		Movie $\Join$ Person 
+	)
+)
+\end{lstlisting}
+\subsection{Select the titles of all movies that were directed by Tim Burton and none of the actors is Johnny Depp.}
+\begin{lstlisting}
+$\pi_{\text{title}}$ (
+	$\sigma_{\text{firstname = 'Tim' }\land\text{ lastname = 'Burton'}}$ (
+		Movie $\Join$ Person 
+	)
+) - $\pi_{\text{title}}$ (
+	$\sigma_{\text{firstname = 'Johnny' }\land\text{ lastname = 'Depp'}}$ (
+		(Movie $\Join$ acts) $\Join$ Person 
+	)
+) 
+\end{lstlisting}
+\subsection{Select the movie title, the name and location of the cinema, and the time and price of all movies that are shown today and have the genre Documentary.}
+\begin{lstlisting}
+$\pi_{\text{title, name, location, time, price}}$ ( 
+	$\sigma_{\text{date = 2016-05-05 }\land\text{ Genre = 'Documentary'}}$ (
+		Movie $\Join$ screening
+	)
+)
+
+\end{lstlisting}
+\end{document}
