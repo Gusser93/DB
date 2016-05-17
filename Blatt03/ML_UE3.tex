@@ -1,0 +1,179 @@
+\documentclass[a4paper,11pt,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{ngerman, eucal, mathrsfs, amsfonts, bbm, amsmath, amssymb, stmaryrd,graphicx, array, geometry, color, wrapfig, wasysym}
+\geometry{left=25mm, right=15mm, bottom=25mm}
+\setlength{\parindent}{0em} 
+\setlength{\headheight}{0em} 
+\title{Datenbanken\\ Blatt 3}
+\subtitle{Gruppe 26}
+\author{Markus Vieth\and Christian Stricker}
+\date{\today}
+\input{../head/lstlisting.tex}
+\begin{document}
+
+\newcommand{\cor}[1]{\textcolor{red}{\textit{#1}}}
+\maketitle
+\cleardoublepage
+\pagestyle{myheadings}
+\markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
+
+\section{Aufgabe}
+\subsection{}
+\subsubsection{}
+\begin{lstlisting}
+$\pi$ a.Firstname, a.Lastname, d.Firstname, d.Lastname (
+	$\sigma$ $\neg$($\neg$(d.Firstname='Lars' $\land$ d.Lastname='von Trier') $\land$ $\neg$(d.Firstname='Michael' $\land$ d.Lastname='Haneke')) (
+		$\rho$ DirectorId$\leftarrow$d.PersonId ($\rho$ d (person)) 
+		$\times$ $\rho$ ActorId$\leftarrow$a.PersonId ($\rho$ a (person)) 
+		$\Join$ $\rho$ DirectorId$\leftarrow$PersonId (directs)
+		$\Join$ $\rho$ ActorId$\leftarrow$PersonId (acts)
+	)
+)
+\end{lstlisting}
+Alternative
+\begin{lstlisting}
+$\pi$ a.Firstname, a.Lastname, d.Firstname, d.Lastname (
+	$\sigma$ d.Firstname='Lars' $\land$ d.Lastname='von Trier' (
+		$\rho$ DirectorId$\leftarrow$d.PersonId ($\rho$ d (person)) 
+		$\times$ $\rho$ ActorId$\leftarrow$a.PersonId ($\rho$ a (person)) 
+		$\Join$ $\rho$ DirectorId$\leftarrow$PersonId (directs)
+		$\Join$ $\rho$ ActorId$\leftarrow$PersonId (acts)
+	)
+) $\cup$ (
+	$\sigma$ d.Firstname='Michael' $\land$ d.Lastname='Haneke' (
+		$\rho$ DirectorId$\leftarrow$d.PersonId ($\rho$ d (person)) 
+		$\times$ $\rho$ ActorId$\leftarrow$a.PersonId ($\rho$ a (person)) 
+		$\Join$ $\rho$ DirectorId$\leftarrow$PersonId (directs)
+		$\Join$ $\rho$ ActorId$\leftarrow$PersonId (acts)
+	)
+)
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+π c.Name, c.Location, s.Time, s.Price, m.Title (
+	σ s.Time = 2100 (
+		ρ m (movie) 
+		⨝ ρ s (screening)
+		⨝ ρ CinemaId←inCinema (screeningRoom) 
+		⨝ ρ c (cinema)
+	)
+)
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+π person.Firstname, person.Lastname, acts.MovieId (
+	σ acts.PersonId = person.PersonId (
+		acts
+		⨯ person 
+	)
+) ÷ (
+	π directs.MovieId (
+		σ person.Firstname = 'Quentin' ∧ person.Lastname = 'Tarantino' (
+			σ person.PersonId = directs.PersonId (
+				person 
+				⨯ directs
+			)
+		)
+	)
+)
+\end{lstlisting}
+\section{Aufgabe}
+\subsection{}
+\subsubsection{}
+\begin{lstlisting}
+$\pi$ a.Firstname, a.Lastname, d.Firstname, d.Lastname (
+	$\sigma$ d.Firstname = 'Lars' $\land$ d.Lastname = 'von Trier' $\land$ acts.MovieId = directs.MovieId (
+		$\rho$ d (person) 
+		$\Join$ directs) 
+		$\times$ ($\rho$ a (person) 
+		$\Join$ acts 
+	) $\cup$ (
+		$\sigma$ d.Firstname = 'Michael' $\land$ d.Lastname = 'Haneke' $\land$ acts.MovieId = directs.MovieId (
+			$\rho$ d (person) 
+			$\Join$ directs) 
+			$\times$ ($\rho$ a (person) 
+			$\Join$ acts 
+		)
+	)
+)
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+$\pi$ Name, Location, Time, Price, Title (
+	$\sigma$ Time=2100 $\land$ Date=2016-05-13 (
+		screening 
+		$\Join$ ($\rho$ CinemaId $\leftarrow$ inCinema (screeningRoom)) 
+		$\Join$ movie
+	)
+)
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+$\pi$ Firstname, Lastname, MovieId (
+	$\rho$ person.PersonId = acts.PersonId (
+		person 
+		$\times$ acts
+	)	
+) $\div$ (
+	$\pi$ MovieId (
+		$\rho$ Firstname='Quentin' $\land$ Lastname='Tarantino' $\land$ person.PersonId = directs.PersonId (
+			person 
+			$\times$ directs
+		)	
+	)
+)
+\end{lstlisting}
+\subsection{}
+\subsubsection{}
+\begin{lstlisting}
+{ [t] | 
+	$\exists$ mId, l, f, y ( [mId, t, l, f, y] $\in$ movie
+		$\land$ $\exists$ pId ([pId, mId] $\in$ directs
+			 $\land$ $\exists$ ln, fn ([pId, ln, fn] $\in$ person
+				 $\land$ fn = 'Friedrich Wilhelm' $\land$ ln = 'Murnau'
+			 )
+		)
+	)
+}
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+{ [t] | 
+	$\exists$ mId, l, f, y ( [mId, t, l, f, y] $\in$ movie
+		$\land$ $\exists$ pId ([pId, mId] $\in$ directs
+			$\land$ $\exists$ ln, fn ([pId, ln, fn] $\in$ person
+				$\land$ fn = 'Tim' $\land$ ln = 'Burton'
+			)
+		)
+	)
+	$\land \neg$ (
+		$\exists$ pId, r ([pId,mId,r] $\in$ acts
+			$\land$ $\exists$ ln, fn ([pId,ln,fn] $\in$ person
+				$\land$ fn = 'Johnny' $\land$ ln = 'Depp'
+			)
+		)
+	)
+}
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+{ [t, n, loc, ti, pr] |
+	 $\exists$ mId, l, f, y ( [mId, t, l, f, y] $\in$ movie
+		$\exists$  rId, d, len ( [mId, rId, ti, d ,len, pr] $\in$ screening
+			$\land$ d = Today
+			$\land$ $\exists$ num, cId ([rId, num, cId] $\in$ screeningRoom
+				$\land$ [cId,n,loc] $\in$ cinema
+			)
+		)
+		$\land$ $\exists$ gId ([gId, mId] $\in$ hasGenre
+			$\land$ $\exists$ gn ([gId, gn] $\in$ genre
+				$\land$ gn = 'Documentary'
+			)
+		)
+	)
+}
+\end{lstlisting}
+
+\end{document}

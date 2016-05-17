@@ -1,0 +1,1 @@
+gib mir alle Movies m, für die gilt: m.Rating > 5 und actor.name="Max Musterman" playsIn m und 
