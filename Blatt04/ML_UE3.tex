@@ -1,0 +1,95 @@
+\documentclass[a4paper,11pt,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{ngerman, eucal, mathrsfs, amsfonts, bbm, amsmath, amssymb, stmaryrd,graphicx, array, geometry, color, wrapfig, wasysym}
+\geometry{left=25mm, right=15mm, bottom=25mm}
+\setlength{\parindent}{0em} 
+\setlength{\headheight}{0em} 
+\title{Datenbanken\\ Blatt 3}
+\subtitle{Gruppe 26}
+\author{Markus Vieth\and Christian Stricker}
+\date{\today}
+\input{../head/lstlisting.tex}
+\begin{document}
+
+\newcommand{\cor}[1]{\textcolor{red}{\textit{#1}}}
+\maketitle
+\cleardoublepage
+\pagestyle{myheadings}
+\markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
+
+\section{Aufgabe}
+\subsection{}
+\subsubsection{}
+
+\subsection{}
+\subsubsection{}
+\begin{lstlisting}
+{ [afn, aln, dfn, dln] | 
+	$\exists$ dPid ( [dPid, dfn, dln] $\in$ Person
+		$\land$ $\exists$ aPid ([aPid, afn, aln] $\in$ Person
+			 $\land$ $\exists$ aMid, r ([aMid, aPid, r] $\in$ acts
+				 $\land$ $\exists$ dMid ([dMid, dPid] $\in$ directs
+					 $\land$ $\neg$(
+						$\neg$(dfn = '' $\land$ dln='' ) 
+						$\land$ $\neg$(dfn = '' $\land$ dln='' )
+					)
+				)
+			)
+		)
+	)
+}
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+{ [n, l, time, p, t] | 
+	$\exists$ cId ( [cId, n ,l] $\in$ Cinema
+		$\land$ $\exists$ rId, num ([rId, num, cId] $\in$ screeningRoom
+			$\land$ $\exists$ mId, d, len ([mId, rId, time, d, len, p] $\in$ screening
+				$\land$ $\exists$ time2, d2, len2, p2, rId2 ([mId, rId2, time2, d2, len2, p2] $\in$ screening
+					$\land$ $\exists$ lang, fsk, y ([mId, t, lang, fsk, y] $\in$ Movie	
+						$\land$ time2 = (21*60)
+						$\land$ d2 = today
+					)
+				)
+			)
+		)
+	)
+}
+\end{lstlisting}
+\subsubsection{}
+\begin{lstlisting}
+{ [afn, aln] |
+	 $\exists$ aPid ( [aPid, afn, aln] $\in$ Person
+		$\land \forall$  mId ( 
+			$\exists$ dPid, dfn, dln ( [dPid, dfn, dln] $\in$ Person
+				$\land$ [dPid, mId] $\in$ directs
+				$\land$ dfn = 
+				$\land$ dln =
+			) $\Rightarrow$ (
+				$\exists$ r (
+					[aPid, mId, r] $\in$ acts
+				)
+			)
+		) $\land$ $\exists$ mId2, r2  (
+			[aPid, mId2, r2] $\in$ acts
+		)
+	)
+}
+\end{lstlisting}
+\section{Aufgabe}
+\subsection{Beispiel}
+\[\{ n | \neg (n \in \text{Professoren}) \}\]
+\subsection{Erklärung}
+Man definiert die Domäne der Formel des Ausdrucks. Dies ist eine Menge, welche folgende Elemente beinhaltet:
+\begin{itemize}
+	\item alle in der Formel vorkommende Konstanten
+	\item alle Attributwerte von Relationen, welche in der Formel referenziert werden
+\end{itemize}
+Das Ergebnis des Ausdrucks muss nun Teilmenge dieser Domäne sein, um sicher zu stellen, dass das Ergebnis der Anfrage endlich ist.
+\section{Aufgabe}
+\subsection{Beispiel}
+\[\{ n | \neg (n \in \text{Professoren}) \}\]
+Eine unsichere Anfrage wie in Aufgabe 2, kann in der relationalen Algebra nicht konstruiert werden. Wie der Name schon sagt, beschreibt die relationale Algebra Rechenoperationen auf Relationen, welche an sich bereits endlich sind. Alle Operatoren der relationalen Algebra ermöglichen höchstens das vervielfachen der Anzahl der betrachteten Elemente, aber nie das Wachstum ins unendliche.
+\end{document}
