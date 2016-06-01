@@ -1,0 +1,13 @@
+Select c.Name, c.Location, s.Price, m.Title
+from cinema c, screening s, screeningRoom r, movie m
+where  m.MovieId = s.MovieId
+   and s.RoomId = r.RoomId
+   and c.Cinemaid = r.inCinema
+   and exists (Select *
+						from cinema c, screening s, screeningRoom r, movie m
+						where m.MovieId = s.MovieId
+							and s.RoomId = r.RoomId
+							and c.Cinemaid = r.inCinema
+							and s.Date = '2016-05-13' 
+							and s.Time = '2100'
+				)

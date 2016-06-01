@@ -6,7 +6,7 @@
 \geometry{left=25mm, right=15mm, bottom=25mm}
 \setlength{\parindent}{0em} 
 \setlength{\headheight}{0em} 
-\title{Datenbanken\\ Blatt 3}
+\title{Datenbanken\\ Blatt 4}
 \subtitle{Gruppe 26}
 \author{Markus Vieth\and Christian Stricker}
 \date{\today}
@@ -20,9 +20,58 @@
 \markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
 
 \section{Aufgabe}
+
 \subsection{}
 \subsubsection{}
+\begin{lstlisting}
+{[a.Firstname, a.Lastname, d.Firstname, d.Lastname] | a, d $\in$ person
+	$\land~\exists$ x $\in$ directs (d.PersonId = x.PersonId
+		$\land~\exists$ y $\in$ acts (a.PersonId = y.PersonId
+			$\land$ x.MovieId = y.MovieId
+		)$\lor~\exists$ x2 $\in$ acts (d.PersonId = x2.PersonId
+			$\land~\exists$ y $\in$ acts (a.PersonId = y.PersonId
+				$\land$ x2.MovieId = y.MovieId
+		)
+	) $\land~\neg$ (
+		$\neg$(d.Firstname = 'Lars' $\land$ d.Lastname = 'von Trier')
+		$\land~\neg$(d.Firstname = 'Michael' $\land$ d.Lastname = 'Haneke')
+	)
+}
 
+\end{lstlisting}
+
+\subsubsection{}
+
+\begin{lstlisting}
+{[c.name, c.location, s2.time, s2.price, m.title] | c $\in$ cinema
+	$\land~\exists$ r $\in$ screeningRoom (r.inCinema = c.CinemaId
+		$\land~\exists$ s1, s2 $\in$ screening (s1.RoomId = r.RoomId
+			$\land~\exists$ m $\in$ movie (s1.MovieId = m.MovieId $\land$ s2.MovieId = m.MovieId
+				$\land$ s1.date = Today $\land$ s1.time = '9:00'
+			)
+		)
+	)
+}
+\end{lstlisting}
+
+
+
+\subsubsection{}
+
+\begin{lstlisting}
+{[a.Firstname, a.Lastname] | a, d $\in$ person
+	$\land~\forall$ m $\in$ movies (d.Firstname = 'Lars' $\land$ d.Lastname = 'von Trier'
+		$\land~\exists$ x $\in$ directs (m.MovieId = x.MovieId
+			$\land$ d.PersonId = x.PersonId
+		) $\Rightarrow$ ( 
+			$\exists$ y $\in$ acts (m.MovieId = y.MovieId
+				$\land$ a.PersonId = y.PersonId
+			)
+		)
+	) $\land~\exists$ t $\in$ acts (t.PersonId = a.PersonId)
+}
+\end{lstlisting}
+\pagebreak
 \subsection{}
 \subsubsection{}
 \begin{lstlisting}
@@ -31,9 +80,11 @@
 		$\land$ $\exists$ aPid ([aPid, afn, aln] $\in$ Person
 			 $\land$ $\exists$ aMid, r ([aMid, aPid, r] $\in$ acts
 				 $\land$ $\exists$ dMid ([dMid, dPid] $\in$ directs
-					 $\land$ $\neg$(
-						$\neg$(dfn = '' $\land$ dln='' ) 
-						$\land$ $\neg$(dfn = '' $\land$ dln='' )
+					 $\lor$ $\exists$ role ([dMid, dPid, role] $\in$ acts
+						 $\land$ $\neg$(
+							$\neg$(dfn = '' $\land$ dln='' ) 
+							$\land$ $\neg$(dfn = '' $\land$ dln='' )
+						)
 					)
 				)
 			)
@@ -65,8 +116,8 @@
 		$\land \forall$  mId ( 
 			$\exists$ dPid, dfn, dln ( [dPid, dfn, dln] $\in$ Person
 				$\land$ [dPid, mId] $\in$ directs
-				$\land$ dfn = 
-				$\land$ dln =
+				$\land$ dfn = 'Vorname'
+				$\land$ dln = 'Nachname'
 			) $\Rightarrow$ (
 				$\exists$ r (
 					[aPid, mId, r] $\in$ acts
@@ -78,6 +129,7 @@
 	)
 }
 \end{lstlisting}
+\pagebreak
 \section{Aufgabe}
 \subsection{Beispiel}
 \[\{ n | \neg (n \in \text{Professoren}) \}\]
@@ -89,7 +141,89 @@ Man definiert die Domäne der Formel des Ausdrucks. Dies ist eine Menge, welche 
 \end{itemize}
 Das Ergebnis des Ausdrucks muss nun Teilmenge dieser Domäne sein, um sicher zu stellen, dass das Ergebnis der Anfrage endlich ist.
 \section{Aufgabe}
-\subsection{Beispiel}
 \[\{ n | \neg (n \in \text{Professoren}) \}\]
 Eine unsichere Anfrage wie in Aufgabe 2, kann in der relationalen Algebra nicht konstruiert werden. Wie der Name schon sagt, beschreibt die relationale Algebra Rechenoperationen auf Relationen, welche an sich bereits endlich sind. Alle Operatoren der relationalen Algebra ermöglichen höchstens das vervielfachen der Anzahl der betrachteten Elemente, aber nie das Wachstum ins unendliche.
+\pagebreak
+\section{Aufgabe}
+\subsection{}
+\begin{lstlisting}[language=SQL]
+select m.Title
+from movie m, directs d, person p
+where m.MovieId = d.MovieId 
+	and d.PersonId = p.PersonId 
+	and p.Lastname = "Murnau" 
+	and p.Firstname = "Friedrich Wilhelm"
+\end{lstlisting}
+\subsection{}
+\begin{lstlisting}[language=SQL]
+select m.Title
+from movie m, directs d, person p
+where m.MovieId = d.MovieId 
+	and d.PersonId = p.PersonId 
+	and p.Lastname = 'Burton' 
+	and p.Firstname = 'Tim' 
+	and m.MovieId not in (
+		select a.MovieId
+		from acts a, person pjd
+		where a.PersonId =  pjd.PersonId 
+			and pjd.Lastname = 'Depp' 
+			and pjd.Firstname = 'Johnny')
+\end{lstlisting}
+\subsection{}
+\begin{lstlisting}[language=SQL]
+select m.Title, c.Name, c.Location, s.Time, s.Price
+from movie m, cinema c, screening s, genre g, hasGenre hg, screeningRoom sr
+where s.Date = Today() 
+	and s.MovieId = m.MovieId 
+	and m.MovieId = hg.MovieId 
+	and hg.GenreId = g.GenreId 
+	and g.Name = 'Documentary' 
+	and s.RoomId = sr.RoomId 
+	and sr.inCinema = c.CinemaId
+\end{lstlisting}
+\subsection{}
+\begin{lstlisting}[language=SQL]
+Select a.Firstname,  a.Lastname,  d.Firstname,  d.Lastname
+from person a, person d
+where
+	exists(
+		select *
+		from  directs x
+		where d.PersonId = x.PersonId
+		and exists(
+			select *
+			from acts y
+			where a.PersonId = y.PersonId
+				and  x.MovieId = y.MovieId
+			)or  exists(
+				select *
+				from acts x2
+				where d.PersonId = x2.PersonId
+				and exists(
+					select *
+					from acts y
+					where a.PersonId = y.PersonId
+						and x2.MovieId = y.MovieId
+				)	and not (
+				not(d.Firstname = "Lars" and d.Lastname = "von Trier")
+				and not(d.Firstname = "Michael" and d.Lastname = "Haneke")
+		)
+	)
+)
+\end{lstlisting}
+\subsection{}
+\begin{lstlisting}[language=SQL]
+Select c.Name, c.Location, s.Price, m.Title
+from cinema c, screening s, screeningRoom r, movie m
+where m.MovieId = s.MovieId
+	and s.RoomId = r.RoomId
+	and c.Cinemaid = r.inCinema
+	and exists (
+		Select m.MovieId = s.MovieId
+		and s.RoomId = r.RoomId
+		and c.Cinemaid = r.inCinema
+		and s.Date = Today() 
+		and s.Time =  2100
+)
+\end{lstlisting}
 \end{document}
