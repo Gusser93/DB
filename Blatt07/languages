@@ -1,0 +1,4 @@
+create view languages as
+	select movie.Title, movie.Language, count(*)
+	from movie natural join screening
+	group by movie.MovieId, movie.Language
