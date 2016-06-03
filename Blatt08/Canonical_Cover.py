@@ -19,7 +19,8 @@ class R:
         print_fds(self.fds)
 
     def remove_empty_fd(self):
-        for fd in self.fds:
+        temp = self.fds.copy()
+        for fd in temp:
             if len(fd.beta) is 0:
                 self.fds.remove(fd)
 
@@ -105,7 +106,7 @@ def attr_closure(fds, attrs):
 
 if __name__ == "__main__":
     test = R(set(), {"A", "B", "C", "D", "E", "F"})
-    test.fds.add(FD({"F"}, {"C", "D"}))
+    test.fds.add(FD({"F"}, {"D", "C"}))
     test.fds.add(FD({"A"}, {"E", "B", "D"}))
     test.fds.add(FD({"D", "C"}, {"B", "A", "F"}))
     test.fds.add(FD({"E"}, {"B", "D"}))
