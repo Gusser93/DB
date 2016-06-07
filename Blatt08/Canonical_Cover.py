@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import itertools
+# import itertools
 
 
 class R:
@@ -63,13 +63,10 @@ class R:
         return copy
 
 
-
 class FD:
     def __init__(self, alpha, beta):
         self.alpha = alpha
         self.beta = beta
-
-
 
 
 def print_fds(fds):
@@ -148,4 +145,6 @@ if __name__ == "__main__":
     test.canonical_cover()
 
     print_fds(test.fds)
-    print(test.minimal_candidate_keys())
+    print("Candidate Keys")
+    for e in test.minimal_candidate_keys():
+        print(e.pop())
