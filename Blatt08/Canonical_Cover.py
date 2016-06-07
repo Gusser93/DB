@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import itertools
+
+
 class R:
     def __init__(self, fds, attrs):
         self.fds = fds
@@ -30,30 +32,44 @@ class R:
             temp[frozenset().union(fd.alpha)] = temp.setdefault(frozenset().union(fd.alpha), set()) | fd.beta
         new_fds = []
         for alpha, beta in temp.items():
-            new_fds += [FD(alpha, beta)]
+            new_fds += [FD(set(alpha), set(beta))]
         self.fds = new_fds
 
     def minimal_candidate_keys(self):
-        candidate_keys = []
-        finish = False
-        for i in range(1, len(self.attrs)):
-            candidate_key_candidates = itertools.combinations(self.attrs, i)
-            for candidate_key_candidate in candidate_key_candidates:
-                temp = set(candidate_key_candidate)
-                print(temp)
-                closure = set(attr_closure(self.fds, temp))
-                if len(closure ^ self.attrs) == 0:
-                    finish = True
-                    candidate_keys.append(temp)
-            if finish:
-                break
-        return candidate_keys
+        k = [self.minimize(self.attrs)]
+        n = 1
+        i = 0
+
+        while i < n:
+            for fd in self.fds:
+                s = fd.alpha | (k[i] - fd.beta)
+                found = False
+                for j in range(n):
+                    if k[j] <= s:
+                        found = True
+                if not found:
+                    k.append(self.minimize(s))
+                    n += 1
+            i += 1
+        return k
+
+    def minimize(self, a):
+        copy = a.copy()
+        for e in a:
+            temp = copy - {e}
+            c = attr_closure(self.fds, temp)
+            if len(self.attrs ^ c) == 0:
+                copy = temp
+        return copy
+
 
 
 class FD:
     def __init__(self, alpha, beta):
         self.alpha = alpha
         self.beta = beta
+
+
 
 
 def print_fds(fds):
