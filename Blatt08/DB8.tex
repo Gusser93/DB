@@ -6,8 +6,9 @@
 \geometry{left=25mm, right=15mm, bottom=25mm}
 \setlength{\parindent}{0em} 
 \setlength{\headheight}{0em} 
-\title{Veranstaltung\\ Blatt i}
-\author{Markus Vieth\and David Klopp\and Christian Stricker}
+\title{Datenbanken\\ Blatt 8}
+\subtitle{Gruppe 26}
+\author{Markus Vieth \and Christian Stricker}
 \date{\today}
 \input{../head/lstlisting.tex}
 \begin{document}
@@ -16,10 +17,525 @@
 \maketitle
 \cleardoublepage
 \pagestyle{myheadings}
-\markboth{Markus Vieth,  David Klopp, Christian Stricker}{Markus Vieth, David Klopp, Christian Stricker}
+\markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
 
 \newpage
 
 \section*{Nr.1}
+\subsection*{Berechnung des Canonical Covers:}
+\begin{lstlisting}
+Linksreduktion von:
+CD → ABF
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob C überflüssig ist:
+Attributhülle von :
+F:
+CD → ABF
+D → CE
+F → CD
+A → BED
+E → BD
 
+α - C:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = CED
+
+E ⊆ CED ⇒ Erg = CBED
+
+Erg = CBED
+CD ⊆ CBED ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+ABF ⊆ ACBEDF
+⇒ C ist überflüssig
+++++++++++++++++++++
+Prüfe ob D überflüssig ist:
+Attributhülle von :
+F:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+
+α - D:
+∅
+
+Berechnung der Attributhülle
+Erg = ∅
+Attributhülle = ∅
+ABF ⊈ ∅
+⇒ D ist nicht überflüssig
+++++++++++++++++++++
+Linksreduktion von:
+D → CE
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob D überflüssig ist:
+Attributhülle von :
+F:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+
+α - D:
+∅
+
+Berechnung der Attributhülle
+Erg = ∅
+Attributhülle = ∅
+CE ⊈ ∅
+⇒ D ist nicht überflüssig
+++++++++++++++++++++
+Linksreduktion von:
+F → CD
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob F überflüssig ist:
+Attributhülle von :
+F:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+
+α - F:
+∅
+
+Berechnung der Attributhülle
+Erg = ∅
+Attributhülle = ∅
+CD ⊈ ∅
+⇒ F ist nicht überflüssig
+++++++++++++++++++++
+Linksreduktion von:
+A → BED
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob A überflüssig ist:
+Attributhülle von :
+F:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+
+α - A:
+∅
+
+Berechnung der Attributhülle
+Erg = ∅
+Attributhülle = ∅
+BED ⊈ ∅
+⇒ A ist nicht überflüssig
+++++++++++++++++++++
+Linksreduktion von:
+E → BD
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob E überflüssig ist:
+Attributhülle von :
+F:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+
+α - E:
+∅
+
+Berechnung der Attributhülle
+Erg = ∅
+Attributhülle = ∅
+BD ⊈ ∅
+⇒ E ist nicht überflüssig
+++++++++++++++++++++
+
+FDs nach Linksreduktion:
+D → ABF
+D → CE
+F → CD
+A → BED
+E → BD
+--------------------
+Rechtsreduktion von:
+D → ABF
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob A überflüssig ist:
+Attributhülle von :
+F - (D → ABF) ∪ (D → BF):
+A → BED
+E → BD
+D → CE
+D → BF
+F → CD
+
+α:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = CED
+
+D ⊆ CED ⇒ Erg = CBEDF
+
+Erg = CBEDF
+Attributhülle = CBEDF
+A ∉ CBEDF
+⇒ A ist nicht überflüssig
+++++++++++++++++++++
+Prüfe ob B überflüssig ist:
+Attributhülle von :
+F - (D → ABF) ∪ (D → AF):
+A → BED
+E → BD
+D → CE
+D → AF
+F → CD
+
+α:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = CED
+
+D ⊆ CED ⇒ Erg = ACEDF
+
+Erg = ACEDF
+A ⊆ ACEDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+B ∈ ACBEDF
+⇒ B ist überflüssig
+++++++++++++++++++++
+Prüfe ob F überflüssig ist:
+Attributhülle von :
+F - (D → AF) ∪ (D → A):
+A → BED
+E → BD
+D → CE
+D → A
+F → CD
+
+α:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = CED
+
+D ⊆ CED ⇒ Erg = ACED
+
+Erg = ACED
+A ⊆ ACED ⇒ Erg = ACBED
+
+Erg = ACBED
+Attributhülle = ACBED
+F ∉ ACBED
+⇒ F ist nicht überflüssig
+++++++++++++++++++++
+Rechtsreduktion von:
+D → CE
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob C überflüssig ist:
+Attributhülle von :
+F - (D → CE) ∪ (D → E):
+A → BED
+E → BD
+D → E
+D → AF
+F → CD
+
+α:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = ED
+
+D ⊆ ED ⇒ Erg = AEDF
+
+F ⊆ AEDF ⇒ Erg = ACEDF
+
+Erg = ACEDF
+A ⊆ ACEDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+C ∈ ACBEDF
+⇒ C ist überflüssig
+++++++++++++++++++++
+Prüfe ob E überflüssig ist:
+Attributhülle von :
+F - (D → E) ∪ (D → ):
+D → 
+A → BED
+E → BD
+D → AF
+F → CD
+
+α:
+D
+
+Berechnung der Attributhülle
+Erg = D
+D ⊆ D ⇒ Erg = ADF
+
+F ⊆ ADF ⇒ Erg = ACDF
+
+Erg = ACDF
+A ⊆ ACDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+E ∈ ACBEDF
+⇒ E ist überflüssig
+++++++++++++++++++++
+Rechtsreduktion von:
+F → CD
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob C überflüssig ist:
+Attributhülle von :
+F - (F → CD) ∪ (F → D):
+D → 
+A → BED
+E → BD
+F → D
+D → AF
+
+α:
+F
+
+Berechnung der Attributhülle
+Erg = F
+F ⊆ F ⇒ Erg = DF
+
+D ⊆ DF ⇒ Erg = ADF
+
+Erg = ADF
+A ⊆ ADF ⇒ Erg = ABEDF
+
+Erg = ABEDF
+Attributhülle = ABEDF
+C ∉ ABEDF
+⇒ C ist nicht überflüssig
+++++++++++++++++++++
+Prüfe ob D überflüssig ist:
+Attributhülle von :
+F - (F → CD) ∪ (F → C):
+D → 
+D → AF
+F → C
+A → BED
+E → BD
+
+α:
+F
+
+Berechnung der Attributhülle
+Erg = F
+F ⊆ F ⇒ Erg = CF
+
+Erg = CF
+Attributhülle = CF
+D ∉ CF
+⇒ D ist nicht überflüssig
+++++++++++++++++++++
+Rechtsreduktion von:
+A → BED
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob B überflüssig ist:
+Attributhülle von :
+F - (A → BED) ∪ (A → ED):
+D → 
+A → ED
+E → BD
+D → AF
+F → CD
+
+α:
+A
+
+Berechnung der Attributhülle
+Erg = A
+A ⊆ A ⇒ Erg = AED
+
+E ⊆ AED ⇒ Erg = ABED
+
+D ⊆ ABED ⇒ Erg = ABEDF
+
+F ⊆ ABEDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+B ∈ ACBEDF
+⇒ B ist überflüssig
+++++++++++++++++++++
+Prüfe ob E überflüssig ist:
+Attributhülle von :
+F - (A → ED) ∪ (A → D):
+D → 
+E → BD
+A → D
+D → AF
+F → CD
+
+α:
+A
+
+Berechnung der Attributhülle
+Erg = A
+A ⊆ A ⇒ Erg = AD
+
+D ⊆ AD ⇒ Erg = ADF
+
+F ⊆ ADF ⇒ Erg = ACDF
+
+Erg = ACDF
+Attributhülle = ACDF
+E ∉ ACDF
+⇒ E ist nicht überflüssig
+++++++++++++++++++++
+Prüfe ob D überflüssig ist:
+Attributhülle von :
+F - (A → ED) ∪ (A → E):
+D → 
+A → E
+E → BD
+D → AF
+F → CD
+
+α:
+A
+
+Berechnung der Attributhülle
+Erg = A
+A ⊆ A ⇒ Erg = AE
+
+E ⊆ AE ⇒ Erg = ABED
+
+D ⊆ ABED ⇒ Erg = ABEDF
+
+F ⊆ ABEDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+D ∈ ACBEDF
+⇒ D ist überflüssig
+++++++++++++++++++++
+Rechtsreduktion von:
+E → BD
+~~~~~~~~~~~~~~~~~~~~
+Prüfe ob B überflüssig ist:
+Attributhülle von :
+F - (E → BD) ∪ (E → D):
+D → 
+E → D
+A → E
+D → AF
+F → CD
+
+α:
+E
+
+Berechnung der Attributhülle
+Erg = E
+E ⊆ E ⇒ Erg = ED
+
+D ⊆ ED ⇒ Erg = AEDF
+
+F ⊆ AEDF ⇒ Erg = ACEDF
+
+Erg = ACEDF
+Attributhülle = ACEDF
+B ∉ ACEDF
+⇒ B ist nicht überflüssig
+++++++++++++++++++++
+Prüfe ob D überflüssig ist:
+Attributhülle von :
+F - (E → BD) ∪ (E → B):
+D → 
+A → E
+E → B
+D → AF
+F → CD
+
+α:
+E
+
+Berechnung der Attributhülle
+Erg = E
+E ⊆ E ⇒ Erg = BE
+
+Erg = BE
+Attributhülle = BE
+D ∉ BE
+⇒ D ist nicht überflüssig
+++++++++++++++++++++
+
+FDs nach Rechtsreduktion:
+D → 
+A → E
+E → BD
+D → AF
+F → CD
+--------------------
+Entferne D →  weil beta leer
+
+FDs nach dem Löschen der Form  α → ∅:
+A → E
+E → BD
+D → AF
+F → CD
+--------------------
+
+FDs nach dem Vereinigen:
+F → CD
+E → BD
+D → AF
+A → E
+--------------------
+Canonical Cover:
+F → CD
+E → BD
+D → AF
+A → E
+\end{lstlisting}
+\subsection*{Attributhülle von A}
+Sei $\mathcal{F}$ das vorher berechnete Canonical Cover.
+$AttrHuelle(\mathcal{F}, A):$\\
+\begin{lstlisting}
+Berechnung der Attributhülle
+Erg = A
+A ⊆ A ⇒ Erg = AE
+
+E ⊆ AE ⇒ Erg = ABED
+
+D ⊆ ABED ⇒ Erg = ABEDF
+
+F ⊆ ABEDF ⇒ Erg = ACBEDF
+
+Erg = ACBEDF
+Attributhülle = ACBEDF
+\end{lstlisting}
+$\Rightarrow AttrHuelle(\mathcal{F}, A) = ABCDEF$
+\subsubsection*{Anmerkung}
+Auf weitere Berechnungen der Attributhülle wird verzichtet. Aus den vorhergegangenen Anwendungen sollte hervorgehen, dass diese von uns durchgeführt werden kann.
+\subsection*{Candidate Keys}
+Sei $\mathcal{F}$ das vorher berechnete Canonical Cover.\\
+$AttrHuelle(\mathcal{F}, A) = ABCDEF = R \Rightarrow$ A ist ein CK\\
+$AttrHuelle(\mathcal{F}, B) = \emptyset \neq R \Rightarrow$ B ist kein CK\\
+$AttrHuelle(\mathcal{F}, C) = \emptyset \neq R \Rightarrow$ C ist kein CK\\
+$AttrHuelle(\mathcal{F}, D) = ABCDEF = R \Rightarrow$ D ist ein CK\\
+$AttrHuelle(\mathcal{F}, E) = ABCDEF = R \Rightarrow$ E ist ein CK\\
+$AttrHuelle(\mathcal{F}, F) = ABCDEF = R \Rightarrow$ F ist ein CK\\
+$AttrHuelle(\mathcal{F}, BC) = \emptyset \neq R \Rightarrow$ BC ist kein CK\\
+Da jeder Schlüssel mit A oder D oder E oder F reduzierbar wäre und B und C und BC R nicht abdecken, sind A und D und E und F die CKs.
 \end{document}
