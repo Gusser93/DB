@@ -72,7 +72,7 @@ class FD:
 
 def print_fds(fds):
     for fd in fds:
-        print "".join(fd.alpha) + " → " + "".join(fd.beta)
+        print ",".join(fd.alpha) + " → " + ",".join(fd.beta)
 
 
 def red_left(r, fd):
@@ -126,12 +126,11 @@ def attr_closure(fds, attrs):
     return erg
 
 if __name__ == "__main__":
-    test = R(set(), {"A", "B", "C", "D", "E", "F"})
-    test.fds.add(FD({"F"}, {"D", "C"}))
-    test.fds.add(FD({"A"}, {"E", "B", "D"}))
-    test.fds.add(FD({"D", "C"}, {"B", "A", "F"}))
-    test.fds.add(FD({"E"}, {"B", "D"}))
-    test.fds.add(FD({"D"}, {"C", "E"}))
+    test = R(set(), {"TN", "N", "A", "DTN", "DN", "MID", "MN", "Y", "L"})
+    test.fds.add(FD({"MID", "MN", "Y", "L", "TN", "N", "A"}, {"DTN", "DN"}))
+    test.fds.add(FD({"TN"}, {"N", "A"}))
+    test.fds.add(FD({"MID"}, {"MN", "Y", "L"}))
+    test.fds.add(FD({"DTN"}, {"DN"}))
 
     test.canonical_cover()
 
@@ -139,4 +138,4 @@ if __name__ == "__main__":
     print_fds(test.fds)
     print("\nCandidate Keys")
     for e in test.minimal_candidate_keys():
-        print(e.pop())
+		print(",".join(e))
