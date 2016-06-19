@@ -126,11 +126,12 @@ def attr_closure(fds, attrs):
     return erg
 
 if __name__ == "__main__":
-    test = R(set(), {"TN", "N", "A", "DTN", "DN", "MID", "MN", "Y", "L"})
-    test.fds.add(FD({"MID", "MN", "Y", "L", "TN", "N", "A"}, {"DTN", "DN"}))
-    test.fds.add(FD({"TN"}, {"N", "A"}))
-    test.fds.add(FD({"MID"}, {"MN", "Y", "L"}))
-    test.fds.add(FD({"DTN"}, {"DN"}))
+    test = R(set(), {"A", "B", "C", "D", "E", "F"})
+    test.fds.add(FD({"F"}, {"D", "C"}))
+    test.fds.add(FD({"A"}, {"E", "B", "D"}))
+    test.fds.add(FD({"D", "C"}, {"B", "A", "F"}))
+    test.fds.add(FD({"E"}, {"B", "D"}))
+    test.fds.add(FD({"D"}, {"C", "E"}))
 
     test.canonical_cover()
 
