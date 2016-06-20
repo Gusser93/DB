@@ -72,7 +72,7 @@ class FD:
 
 def print_fds(fds):
     for fd in fds:
-        print "".join(fd.alpha) + " → " + "".join(fd.beta)
+        print ",".join(fd.alpha) + " → " + ",".join(fd.beta)
 
 
 def red_left(r, fd):
@@ -126,17 +126,36 @@ def attr_closure(fds, attrs):
     return erg
 
 if __name__ == "__main__":
-    test = R(set(), {"A", "B", "C", "D", "E", "F"})
-    test.fds.add(FD({"F"}, {"D", "C"}))
-    test.fds.add(FD({"A"}, {"E", "B", "D"}))
-    test.fds.add(FD({"D", "C"}, {"B", "A", "F"}))
-    test.fds.add(FD({"E"}, {"B", "D"}))
-    test.fds.add(FD({"D"}, {"C", "E"}))
+    test = R(set(), {"TN", "N", "A", "DTN", "DN", "MID", "MN", "Y", "L"})
+    test.fds.add(FD({"TN", "N", "A", "DTN", "DN"}, {"MID", "MN", "Y", "L"}))
+    test.fds.add(FD({"TN"}, {"N", "A"}))
+    test.fds.add(FD({"MID"}, {"MN", "Y", "L"}))
+    test.fds.add(FD({"DTN"}, {"DN"}))
+
+    test2 = R(set(), {"MID", "MN", "Y", "L"})
+    test2.fds.add(FD({"MID"}, {"MN", "Y", "L"}))
+
+    test3 = R(set(), {"DTN", "DN"})
+    test3.fds.add(FD({"DTN"}, {"DN"}))
 
     test.canonical_cover()
+    test2.canonical_cover()
+    test3.canonical_cover()
 
-    print "Canonical Cover:"
+    print "\nCanonical Cover:"
     print_fds(test.fds)
     print("\nCandidate Keys")
     for e in test.minimal_candidate_keys():
+        print(e.pop())
+
+    print "\nCanonical Cover:"
+    print_fds(test2.fds)
+    print("\nCandidate Keys")
+    for e in test2.minimal_candidate_keys():
+        print(e.pop())
+
+    print "\nCanonical Cover:"
+    print_fds(test3.fds)
+    print("\nCandidate Keys")
+    for e in test3.minimal_candidate_keys():
         print(e.pop())
