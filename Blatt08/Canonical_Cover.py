@@ -146,16 +146,5 @@ if __name__ == "__main__":
     print_fds(test.fds)
     print("\nCandidate Keys")
     for e in test.minimal_candidate_keys():
-        print(e.pop())
+		print(",".join(e))
 
-    print "\nCanonical Cover:"
-    print_fds(test2.fds)
-    print("\nCandidate Keys")
-    for e in test2.minimal_candidate_keys():
-        print(e.pop())
-
-    print "\nCanonical Cover:"
-    print_fds(test3.fds)
-    print("\nCandidate Keys")
-    for e in test3.minimal_candidate_keys():
-        print(e.pop())
