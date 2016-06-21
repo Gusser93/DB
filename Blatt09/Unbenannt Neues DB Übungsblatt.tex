@@ -1,0 +1,111 @@
+\documentclass[a4paper,11pt,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage[normalem]{ulem}
+\usepackage{ngerman, eucal, mathrsfs, amsfonts, bbm, amsmath, amssymb, stmaryrd,graphicx, array, geometry, color, wrapfig, wasysym}
+\geometry{left=25mm, right=15mm, bottom=25mm}
+\setlength{\parindent}{0em} 
+\setlength{\headheight}{0em} 
+\title{Datenbanken\\ Blatt 9}
+\subtitle{Gruppe 26}
+\author{Markus Vieth\and Christian Stricker}
+\date{\today}
+\input{../head/lstlisting.tex}
+\begin{document}
+
+\newcommand{\cor}[1]{\textcolor{red}{\textit{#1}}}
+\maketitle
+\cleardoublepage
+\pagestyle{myheadings}
+\markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
+
+\section{Aufgabe}
+Zur besseren Lesbarkeit, wird das berechnen der Attributhülle übersprungen.\\
+\subsection{}
+\begin{align*}
+&R = \{ TN, N, A, DTN, DN, MID, MN, Y, L \}\\
+&FDs:\\
+&TN \rightarrow N, A\\
+&DTN \rightarrow DN\\
+&MID \rightarrow MN, Y, L\\
+&MID, MN, Y, L, TN, N, A \rightarrow DTN, DN 
+\end{align*}
+\subsection{}
+Aus den FDs ergeht folgender Superschlüssel $TN, DTN, MID$, welcher mit der letzten FD zu folgendem Candidate Key (im folgenden CK) gekürzt werden kann: $TN, MID$
+\subsection{}
+\subsubsection{Linksreduktion}
+\begin{align*}
+&FDs:\\
+&TN \rightarrow N, A\\
+&DTN \rightarrow DN\\
+&MID \rightarrow MN, Y, L\\
+&MID, \overset{\text{überflüssig}}{\text{\sout{MN, Y, L,}}} TN, \overset{\text{überflüssig}}{\text{\sout{N, A}}} \rightarrow DTN, DN 
+\end{align*}
+\subsubsection{Rechtsreduktion}
+\begin{align*}
+&FDs:\\
+&TN \rightarrow N, A\\
+&DTN \rightarrow DN\\
+&MID \rightarrow MN, Y, L\\
+&MID, TN\rightarrow DTN\overset{\text{überflüssig}}{\text{\sout{DN}}}
+\end{align*}
+\subsubsection{Canonical Cover}
+\begin{align*}
+&FDs:\\
+&TN \rightarrow N, A\\
+&DTN \rightarrow DN\\
+&MID \rightarrow MN, Y, L\\
+&MID, TN\rightarrow DTN
+\end{align*}
+\subsection{}
+\begin{align*}
+R_{Cinema} = &\{\underline{TN}, N, A\}\\
+& \text{mit FD :}TN \rightarrow N, A\\
+R_{Distributor} = &\{\underline{DTN}, DN\}\\
+& \text{mit FD :}DTN \rightarrow DN\\
+R_{Movie} = &\{\underline{MID}, MD, Y, L\}\\
+& \text{mit FD :}MID \rightarrow MN, Y, L\\
+R_{rentedBy} = &\{\underline{TN, MID}, DTN\}\\
+& \text{mit FD :}MID, TN\rightarrow DTN
+\end{align*}
+\section{Aufgabe}
+Wir gehen nicht von streng katholischen Familien aus.
+\subsection{}
+Durch Transitivität, Verstärkung und Verallgemeinerung wären weitere MVDs möglich
+\begin{align*}
+&R = \{ GF, GM, F, M, C \}\\
+&FDs:\\
+&C \rightarrow F, M\\
+&F, M  \twoheadrightarrow C\\
+&F,M  \twoheadrightarrow GF, GM\\
+&C \twoheadrightarrow GF, GM\\
+&GF, GM \twoheadrightarrow F, M, C\\
+&C,GM \rightarrow GF\\
+&C,GF \rightarrow GM\\
+&F \twoheadrightarrow M\\
+&M \twoheadrightarrow F\\
+&GF \twoheadrightarrow GM\\
+&GM \twoheadrightarrow GF
+\end{align*}
+\subsection{}
+\paragraph{Candidate Keys:} $\{C,GM\}, \{C,GF\}$
+\subsection{}
+\begin{align*}
+& Z = \{\{ GF,GM,F,M,C \}\}\\
+& R = \{ GF,GM,F,M,C \}\\
+&C \twoheadrightarrow F,M\text{ nicht trivial}\\
+&\Rightarrow R_1 = \{ C,F,M \}, R_2 = \{ C, GF, GM \}\\
+& Z = \{ R_1, R_2 \} \\
+& R_1 = \{ C,F,M \}\\
+&F \twoheadrightarrow M\text{ nicht trivial}\\
+&\Rightarrow R_{1_1} = \{ F, M\}, R_{1_2} = \{ F, C \}\\
+& Z = \{ R_2, R_{1_1}, R_{1_2}\}\\
+& R_2 = \{ C, GF, GM \}\\
+& GF \twoheadrightarrow GM\text{ nicht trvial}\\
+& \Rightarrow R_{2_1} = \{ GF, GM\}, R_{2_2} = \{ GF, C \} \\
+& Z = \{ R_{1_1}, R_{1_2}, R_{2_1}, R_{2_2}\}
+\end{align*}
+Algorithmus ist fertig, da alle weiteren MVDs in den $R_i$ in $Z$ trivial sein müssen, da alle $R_i$ in $Z$ nur noch 2 Elemente haben.\\
+Bei Familien ohne Scheidung hätte der Algorithmus mit $R_1$ und $R_2$ geendet.
+\end{document}
