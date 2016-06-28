@@ -1,0 +1,342 @@
+\documentclass[a4paper,11pt,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{ngerman, eucal, mathrsfs, amsfonts, bbm, amsmath, amssymb, stmaryrd,graphicx, array, geometry, color, wrapfig, wasysym}
+\geometry{left=25mm, right=15mm, bottom=25mm}
+\setlength{\parindent}{0em} 
+\setlength{\headheight}{0em} 
+\title{Datenbanken\\ Blatt 10}
+\subtitle{Gruppe 26}
+\author{Markus Vieth\and Christian Stricker}
+\date{\today}
+\input{../head/lstlisting.tex}
+\begin{document}
+
+\newcommand{\cor}[1]{\textcolor{red}{\textit{#1}}}
+\maketitle
+\cleardoublepage
+\pagestyle{myheadings}
+\markboth{Markus Vieth, Christian Stricker}{Markus Vieth, Christian Stricker}
+
+\section{Aufgabe}
+\subsection{FDs}
+\begin{itemize}
+	\item $TaID \rightarrow N,NS,A$
+	\item $A \rightarrow TaID$
+	\item $MCK \rightarrow TaID$
+	\item $EID \rightarrow EN$
+	\item $TiID \rightarrow EID$
+	\item $D,MID \rightarrow SID$
+	\item $EID \rightarrow TaID$
+\end{itemize}
+\subsection{Canonical Cover}
+\begin{itemize}
+	\item $TaID \rightarrow N,NS,A$
+	\item $A \rightarrow TaID$
+	\item $MCK \rightarrow TaID$
+	\item $EID \rightarrow EN, TaID$
+	\item $TiID \rightarrow EID$
+	\item $D,MID \rightarrow SID$
+\end{itemize}
+\subsection{Candidate Keys}
+\begin{itemize}
+	\item $\{ D,TiId,MCK \}$
+\end{itemize}
+\subsection{Normalform}
+\subsubsection{1. Normalform}
+Die Relation erfüllt die Bedingung für die 1. Normalform, da alle Attribute atomare Datentypen haben.
+\subsubsection{2. Normalform}
+Die Relation verletzt die Bedingung der 2. Normalform, dass alle Nicht-Schlüssel-Attribute von einem Candidate Key voll funktional abhängig sein müssen. Im speziellen z.B. die ScreeningId, welche vom Datum und von der MovieId abhängig sind, aber nicht vom MCK.\\
+$\Rightarrow$ die Relation ist in 1. Normalform
+\subsection{3. Normalform}
+\subsubsection{Synthesealgorithmus}
+\begin{itemize}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Cinema}$] $= \{ TaID, N, NS, A \}$
+		\item[$FDs$] : 
+			\begin{itemize}
+				\item $TaID \rightarrow N,NS,A$
+				\item $A \rightarrow TaID$
+			\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Adress}$] $= \{ A, TaID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $A \rightarrow TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{MCK}$] $= \{ MCK, TiD \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $MCK \rightarrow TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Employee}$] $= \{ EID, EN, TaID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $EID \rightarrow EN, TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Ticket}$] $= \{ TiID, EID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $TiID \rightarrow EID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Screening}$] $= \{ D, MID, SID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $D,MID \rightarrow SID$
+		\end{itemize}
+	\end{description}
+\end{itemize}
+
+\[ \mathbb{R}_{Adress} \subseteq \mathbb{R}_{Cinema} \]
+\[ \not\exists \mathbb{R}_i | \exists K \in CandidateKeys | K \subseteq \mathbb{R}_i \Rightarrow \]
+
+\begin{itemize}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Key}$] $= \{ D, TiID, MCK \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $\emptyset$
+		\end{itemize}
+	\end{description}
+\end{itemize}
+\[ \Rightarrow \]
+
+\begin{itemize}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Cinema}$] $= \{ TaID, N, NS, A \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $TaID \rightarrow N,NS,A$
+			\item $A \rightarrow TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Key}$] $= \{ D, TiID, MCK \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $\emptyset$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{MCK}$] $= \{ MCK, TiD \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $MCK \rightarrow TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Employee}$] $= \{ EID, EN, TaID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $EID \rightarrow EN, TaID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Ticket}$] $= \{ TiID, EID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $TiID \rightarrow EID$
+		\end{itemize}
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Screening}$] $= \{ D, MID, SID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $D,MID \rightarrow SID$
+		\end{itemize}
+	\end{description}
+\end{itemize}
+
+\subsection{BCNF}
+\begin{itemize}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Cinema}$] $= \{ TaID, N, NS, A \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $TaID \rightarrow N,NS,A$
+			\item $A \rightarrow TaID$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $TaID$
+			\item $A$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Key}$] $= \{ D, TiID, MCK \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $\emptyset$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $\emptyset$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{MCK}$] $= \{ MCK, TiD \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $MCK \rightarrow TaID$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $MCK$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Employee}$] $= \{ EID, EN, TaID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $EID \rightarrow EN, TaID$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $EiD$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Ticket}$] $= \{ TiID, EID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $TiID \rightarrow EID$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $TiID$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{Screening}$] $= \{ D, MID, SID \}$
+		\item[$FDs$] : 
+		\begin{itemize}
+			\item $D,MID \rightarrow SID$
+		\end{itemize}
+		\item[$CK$] : 
+		\begin{itemize}
+			\item $D, MID$
+		\end{itemize}
+		\item $\Rightarrow$ in BCNF
+	\end{description}
+\end{itemize}
+$\Rightarrow$ das Schema ist in BCNF.
+\subsection{MVDs}
+\begin{itemize}
+	\item $TaID \rightarrow N,NS,A$
+	\item $A \rightarrow TaID$
+	\item $MCK \rightarrow TaID$
+	\item $EID \rightarrow EN, TaID$
+	\item $TiID \rightarrow EID$
+	\item $D,MID \rightarrow SID$
+	\item $MCK \twoheadrightarrow D,SID$
+	\item $EID \twoheadrightarrow TiID$
+	\item $NS \twoheadrightarrow TaID$
+	\item $TaID \twoheadrightarrow EID$
+\end{itemize}
+\subsection{4. Normalform}
+\subsubsection{von BCNF}
+In diesem Fall entspricht BCNF 4. Normalform, da alle MVD trivial in den Relationen sind.
+\subsubsection{von Original}
+\[ Z = \{ \mathbb{R} \} \]
+\[ MVD = MCK \twoheadrightarrow D,SID \Rightarrow\mathbb{R}_1 = \{ MCK, D, SID \}, \mathbb{R}_2 = \{ MCK, TaID, N, NS, A, EID, EN, TiID \} \]
+\[ MVD =  EID \twoheadrightarrow TiTD \Rightarrow \mathbb{R}_{2_1} = \{ EiD, TiID \}, \mathbb{R}_{2_2} = \{ EiD, MCK, TaID, N, NS, A, EN \} \]
+\[ MVD =  TaID \twoheadrightarrow EID \Rightarrow \mathbb{R}_{2_{2_1}} = \{ TaID, EID \}, \mathbb{R}_{2_{2_2}} = \{ TaID, MCK, N, NS, A, EN \} \]
+\[ MVD =  NS \twoheadrightarrow TaID \Rightarrow \mathbb{R}_{2_{2_{2_1}}} = \{ NS, TaID \}, \mathbb{R}_{2_{2_{2_2}}} = \{ MCK, N, A, NS, EN \} \]
+\[ MVD =  MCK \twoheadrightarrow N, NS, A \Rightarrow \mathbb{R}_{2_{2_{2_{2_1}}}} = \{ MCK, N, NS, A \}, \mathbb{R}_{2_{2_{2_{2_2}}}} = \{ MCK, EN \} \]
+
+\[ \Rightarrow\]
+\begin{itemize}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_1$] $= \{ MCK, D, SID \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $MCK \twoheadrightarrow D,SID$
+			\item $A \rightarrow TaID$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{2_1}$] $= \{ EiD, TiID \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $EID \twoheadrightarrow TiID$
+			\item $TiID \rightarrow EID$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{2_{2_1}}$] $= \{ TaID, EID \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $TaID \twoheadrightarrow EID$
+			\item $EID \rightarrow TaID$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{2_{2_{2_1}}}$] $= \{ NS, TaID \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $NS \twoheadrightarrow TaID$
+			\item $TaID \rightarrow NS$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{2_{2_{2_{2_1}}}}$] $= \{ MCK, N, A, NS \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $MCK \rightarrow N, NS, A$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+	\item
+	\begin{description}
+		\item[$\mathbb{R}_{2_{2_{2_{2_2}}}}$] $= \{ MCK, EN \}$
+		\item[$MVDs$] : 
+		\begin{itemize}
+			\item $\emptyset$
+		\end{itemize}
+		\item $\Rightarrow$ in 4NF
+	\end{description}
+\end{itemize}
+\end{document}
